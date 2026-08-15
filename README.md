@@ -44,6 +44,8 @@ I reused the same subject (a local sports club) because it let me focus on the b
 | Version control | Git and GitHub |
 
 ## Screenshots
+<img width="3143" height="1848" alt="image" src="https://github.com/user-attachments/assets/3568e017-26e8-4835-aea5-356dcaa460c2" />
+<img width="3156" height="1855" alt="image" src="https://github.com/user-attachments/assets/7613160a-5551-4fe9-acb9-8ba6102952c3" />
 
 
 ## Getting started
