@@ -15,11 +15,22 @@ I reused the same subject (a local sports club) because it let me focus on the b
 
 ## Features
 
-I built two full CRUD resources: News and Tags. Both have the usual create, read, update, and delete operations, and both go through validation before anything touches the database. Required fields can't be empty, text fields like the author name or a tag name can't contain digits, titles need to be at least 5 characters, dates have to follow the YYYY MM DD format, and tag names have to be unique.
+### Core
 
-On top of that, `GET /news` supports pagination through `limit` and `offset` query parameters, and `GET /news/search` lets you search across both the title and the content at once instead of just one field. Every endpoint is documented on a page served at the root route, so anyone running the project locally can see what's available without opening the code.
+- **CRUD for News** — create, read, update, and delete news posts, including their linked tags
+- **CRUD for Tags** — create, read, update, and delete tags, with duplicate-name protection
+- **Validation** — required fields, no digits in text fields, minimum title length, strict date format, unique tag names
+- **Pagination** — `GET /news` supports `limit` and `offset` query parameters
+- **Search** — `GET /news/search` searches across both the `title` and `content` fields
+- **API documentation page** — served at the root (`/`), listing every endpoint
 
-A few small things I added along the way: duplicate tags return a proper 409 Conflict instead of a generic server error, and paginated responses include the total count so a client can build real pagination instead of guessing.
+### Extra
+
+- Search across two fields at once (`title` and `content`), not just one
+- Sorting on `GET /news` (`title`, `author`, `published_at`, `created_at`) and `GET /tags` (`name`), both ascending and descending via a `sort` query parameter
+- Duplicate tags return a clean `409 Conflict` instead of a generic server error
+- Paginated responses include `total`, `limit`, and `offset`, so a client can build real pagination
+- The documentation page is styled to match the visual identity of the companion Laravel project (same dark theme, dotted background, and accent colors), with a sticky, blurred navbar that hides on scroll down and reappears on scroll up, a scroll-spy that highlights the News or Tags section depending on where the user is on the page, and a fully responsive layout for mobile
 
 ## Tech stack
 
@@ -123,8 +134,7 @@ dotenv. (n.d.). *dotenv npm package documentation*. Retrieved August 2026, from 
 
 ## Acknowledgements
 
-- [Claude](https://claude.ai/), used throughout development for help structuring the project and 
-  debugging
+- [Claude](https://claude.ai), used throughout development for help structuring the project and debugging
 - [Postman](https://www.postman.com), used to test and debug every endpoint while building this
 - [Stack Overflow](https://stackoverflow.com), for the usual debugging detours
 - [Perplexity](https://www.perplexity.ai), used for quick research along the way
