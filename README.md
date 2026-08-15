@@ -1,4 +1,4 @@
-# Sportclub API
+# project_nodejs
 
 A data-driven REST API for a local sports club, built with Node.js, Express, and MySQL. Companion project to [project_laravel](https://github.com/amingharbaoui/project_laravel).
 
