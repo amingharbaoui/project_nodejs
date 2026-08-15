@@ -9,26 +9,17 @@ A data-driven REST API for a local sports club, built with Node.js, Express, and
 
 ## What is this?
 
-This is the Node.js counterpart to my [Laravel Sportclub project](https://github.com/amingharbaoui/project_laravel). It's a standalone data-driven REST API — not connected to the Laravel front end — built to practice designing a backend with Express and MySQL: resource-style routers, controllers, a connection pool, and request validation, all returning plain JSON.
+This is the Node.js counterpart to my [Laravel Sportclub project](https://github.com/amingharbaoui/project_laravel). I already had the site built in Laravel, so for this one I wanted to build something separate: a standalone REST API using Express and MySQL, with its own database, its own routes, and no connection at all to the Laravel front end. It only returns JSON, nothing else.
 
-The API manages **news posts** and **tags** for the club, connected through a many-to-many relationship, similar in spirit to the `News` ↔ `Tag` relationship in the Laravel project.
+I reused the same subject (a local sports club) because it let me focus on the backend itself instead of inventing a whole new dataset. The API manages news posts and tags for the club, connected through a many to many relationship, similar in spirit to how News and Tag are related in the Laravel project.
 
 ## Features
 
-### Core
+I built two full CRUD resources: News and Tags. Both have the usual create, read, update, and delete operations, and both go through validation before anything touches the database. Required fields can't be empty, text fields like the author name or a tag name can't contain digits, titles need to be at least 5 characters, dates have to follow the YYYY MM DD format, and tag names have to be unique.
 
-- **CRUD for News** — create, read, update, and delete news posts, including their linked tags
-- **CRUD for Tags** — create, read, update, and delete tags, with duplicate-name protection
-- **Validation** — required fields, no digits allowed in text fields, minimum title length, strict date format, and unique-tag enforcement
-- **Pagination** — `GET /news` supports `limit` and `offset` query parameters
-- **Search** — `GET /news/search` searches across both the `title` and `content` fields
-- **API documentation page** — a plain HTML page served at the root (`/`) describing every endpoint
+On top of that, `GET /news` supports pagination through `limit` and `offset` query parameters, and `GET /news/search` lets you search across both the title and the content at once instead of just one field. Every endpoint is documented on a page served at the root route, so anyone running the project locally can see what's available without opening the code.
 
-### Extra features
-
-- Search across two fields at once (`title` and `content`), not just one
-- Duplicate-entry handling for tags (returns a clear `409 Conflict` instead of a generic server error)
-- Response metadata on paginated results (`total`, `limit`, `offset`) so a client can build proper pagination
+A few small things I added along the way: duplicate tags return a proper 409 Conflict instead of a generic server error, and paginated responses include the total count so a client can build real pagination instead of guessing.
 
 ## Tech stack
 
@@ -37,15 +28,18 @@ The API manages **news posts** and **tags** for the club, connected through a ma
 | Runtime | Node.js 26.7.0 |
 | Framework | Express 5 |
 | Database | MySQL 8.4 |
-| Database driver | mysql2 (promise-based) |
+| Database driver | mysql2 (promise based) |
 | Local environment | Laragon |
-| Version control | Git & GitHub |
+| Version control | Git and GitHub |
 
 ## Screenshots
 
+
 ## Getting started
 
-You'll need Node.js 20+ (built with v26.7.0, npm 12.0.2), and MySQL (e.g. via [Laragon](https://laragon.org/) or [XAMPP](https://www.apachefriends.org/)).
+You will need Node.js 20 or later (I built this with v26.7.0 and npm 12.0.2) and a running MySQL instance, for example through Laragon or XAMPP.
+
+Clone the repo and install the dependencies:
 
 ```bash
 git clone https://github.com/amingharbaoui/project_nodejs.git
@@ -53,7 +47,7 @@ cd project_nodejs
 npm install
 ```
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root with your own database credentials:
 
 ```
 DB_HOST=127.0.0.1
@@ -64,25 +58,25 @@ DB_NAME=nodejs
 PORT=3000
 ```
 
-Create the database and tables by running `setup.sql` in HeidiSQL or another MySQL client (it also seeds some sample news posts and tags):
+Run `setup.sql` to create the database, the tables, and a bit of sample data:
 
 ```bash
 mysql -u root -p < setup.sql
 ```
 
-Or paste the contents of `setup.sql` into your MySQL client's query window.
+Or just paste its contents into your MySQL client's query window if that's easier.
 
-Start the server:
+Then start the server:
 
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:3000` — this shows the full endpoint documentation.
+Once it's running, open `http://localhost:3000` in your browser to see the full list of endpoints.
 
 ## Endpoints
 
-A complete, always up-to-date list of endpoints, query parameters, request bodies, and validation rules is served at the root route (`GET /`) of the running app.
+The root route (`GET /`) always has the most up to date and complete documentation, including query parameters, request bodies, and validation rules. Here's the short version:
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -103,16 +97,19 @@ A complete, always up-to-date list of endpoints, query parameters, request bodie
 ```
 project_nodejs/
 ├── config/
-│   └── db.js              # MySQL connection pool
+│   └── db.js
 ├── controllers/
-│   ├── newsController.js  # CRUD + search/pagination for News
-│   ├── tagController.js   # CRUD for Tag
-│   └── validators.js      # Reusable validation functions
+│   ├── newsController.js
+│   ├── tagController.js
+│   └── validators.js
 ├── routes/
 │   ├── newsRoutes.js
 │   └── tagRoutes.js
-├── server.js               # App entry point
-├── .env                     # Database config (not in git)
+├── public/
+│   └── index.html
+├── server.js
+├── setup.sql
+├── .env
 └── .gitignore
 ```
 
@@ -126,7 +123,12 @@ dotenv. (n.d.). *dotenv npm package documentation*. Retrieved August 2026, from 
 
 ## Acknowledgements
 
-- [Postman](https://www.postman.com) for testing and debugging the API endpoints
+- [Claude](https://claude.ai/), used throughout development for help structuring the project and 
+  debugging
+- [Postman](https://www.postman.com), used to test and debug every endpoint while building this
+- [Stack Overflow](https://stackoverflow.com), for the usual debugging detours
+- [Perplexity](https://www.perplexity.ai), used for quick research along the way
+- [readme.so](https://readme.so), used as a starting point for structuring this README
 
 ## Author
 
