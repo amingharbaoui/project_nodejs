@@ -1,6 +1,8 @@
 import pool from '../config/db.js';
 import { validateNews } from './validators.js';
 
+const SORTABLE_NEWS_FIELDS = ['title', 'author', 'published_at', 'created_at'];
+
 export const getAllNews = async (req, res) => {
 	try {
 		let limit = parseInt(req.query.limit) || 10;
@@ -10,8 +12,22 @@ export const getAllNews = async (req, res) => {
 		if (limit < 1) limit = 10;
 		if (offset < 0) offset = 0;
 
+		let sortField = 'published_at';
+		let sortDirection = 'DESC';
+
+		if (req.query.sort) {
+			const raw = req.query.sort;
+			const isDescending = raw.startsWith('-');
+			const field = isDescending ? raw.slice(1) : raw;
+
+			if (SORTABLE_NEWS_FIELDS.includes(field)) {
+				sortField = field;
+				sortDirection = isDescending ? 'DESC' : 'ASC';
+			}
+		}
+
 		const [rows] = await pool.query(
-			'SELECT * FROM news ORDER BY published_at DESC LIMIT ? OFFSET ?',
+			`SELECT * FROM news ORDER BY ${sortField} ${sortDirection} LIMIT ? OFFSET ?`,
 			[limit, offset]
 		);
 
@@ -21,7 +37,8 @@ export const getAllNews = async (req, res) => {
 			data: rows,
 			total: countResult[0].total,
 			limit,
-			offset
+			offset,
+			sort: `${sortDirection === 'DESC' ? '-' : ''}${sortField}`
 		});
 	} catch (err) {
 		res.status(500).json({ error: err.message });
